@@ -336,6 +336,7 @@ print(random.choice(pairs))
 #
 
 class EncoderRNN(nn.Module):
+    # input_size = input_lang.n_words, hidden_size = 256
     def __init__(self, input_size, hidden_size, n_layers=1):
         super(EncoderRNN, self).__init__()
         self.n_layers = n_layers
@@ -471,7 +472,7 @@ class AttnDecoderRNN(nn.Module):
         embedded = self.dropout(embedded)
 
         attn_weights = F.softmax(
-            self.attn(torch.cat((embedded[0], hidden[0]), 1)))
+            self.attn(torch.cat((embedded[0], hidden[0]), 1)))  # 最后一个参数为0表示按行合并，1表示按列合并
         attn_applied = torch.bmm(attn_weights.unsqueeze(0),
                                  encoder_outputs.unsqueeze(0))
 
